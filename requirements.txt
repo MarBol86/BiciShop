@@ -1,2 +1,3 @@
 DJANGO==3.2.7
 pillow
+djangorestframework==3.12.4

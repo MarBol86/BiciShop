@@ -52,9 +52,11 @@ class Producto(models.Model):
     imagen      = models.ImageField( upload_to= "fotos" , null=True)
     usado       = models.BooleanField( default= False)
     publicar    = models.BooleanField()
+    categoria   = models.CharField(max_length=255)
+    nombre = models.TextField(max_length=250, blank=True, validators=[MaxLengthValidator(250)])
 
     def __str__(self):
-        return f'{self.producto} -> {self.tipo}  -> {self.rodado} -> {self.color} -> {self.material} -> {self.descripcion} -> {self.precio} -> {self.descuento} -> {self.cantidad}  -> {self.imagen.ur} -> {self.usado}'
+        return f'{self.producto} -> {self.tipo}  -> {self.rodado} -> {self.color} -> {self.material} -> {self.descripcion} -> {self.precio} -> {self.descuento} -> {self.cantidad}  -> {self.imagen.url} -> {self.usado}'
 
     #if usado == True:
     #   def __str__(self):

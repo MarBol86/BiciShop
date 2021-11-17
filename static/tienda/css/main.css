@@ -10,7 +10,7 @@ html {
 }
 
 body {
-    background-image: url(/assets/images/bg.jpg);
+    background-image: url(/static/tienda/assets/images/bg.jpg);
     background-repeat: no-repeat;
     background-size: cover;
     background-position: center center;
@@ -1017,7 +1017,7 @@ form fieldset legend {
     height: 90%;
     width: 100%;
     padding: 0.4rem;
-    background-image: url(/assets/images/tienda.jpg);
+    background-image: url(/static/tienda/assets/images/tienda.jpg);
     background-position-x: center;
     background-repeat: no-repeat;
     display: -webkit-box;
