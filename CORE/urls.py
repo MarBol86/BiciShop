@@ -19,7 +19,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 from Usuarios.views import loginPage, register, home, logoutUser
 from LandingPage.views import LandingPage
-from Tienda.views import tienda, agregar_producto, eliminar_producto, restar_producto, limpiar_carrito
+from Tienda.views import ProductoListApi, tienda, agregar_producto, eliminar_producto, restar_producto, limpiar_carrito
 
 
 urlpatterns = [
@@ -35,6 +35,7 @@ urlpatterns = [
     path('restar/<int:producto_id>/', restar_producto, name="Sub"),
     path('limpiar/', limpiar_carrito, name="CLS"),
     path('tienda/landing_page.html/', LandingPage.as_view(),  name='landing_page'),
+    path('productos/', ProductoListApi.as_view(), name='productos')
 ]
    # urlpatterns  += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 

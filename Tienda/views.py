@@ -1,7 +1,11 @@
 from django.shortcuts import render, redirect
+from rest_framework.generics import ListAPIView
+from rest_framework.permissions import IsAuthenticated
+
 from django.contrib.auth.decorators import login_required
 from Tienda.models import Producto, Tipos_Bicicleta, Rodado, Color, Material_Cuadro, Estado_Pedido
 from Tienda.Carrito import Carrito
+from Tienda.serializers import ProductoSerializer
 
 # Create your views here.
 def tienda(request):
@@ -37,6 +41,10 @@ def limpiar_carrito (request):
     return redirect("Tienda")
 
 
+class ProductoListApi(ListAPIView):
+    permission_classes = [IsAuthenticated, ]
+    serializer_class = ProductoSerializer
+    queryset = Producto.objects.all()
 
 #Poner el siguiente decorador arriba de las funciones vista que no se pueda acceder
 #a menos que se esté logueado
