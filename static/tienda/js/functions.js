@@ -1,4 +1,4 @@
-import { addAlert, cantAlert } from './alerts.js'
+import { addAlert, cantAlert } from "/static/tienda/js/alerts.js"
 
 //Variables.
 const store = document.querySelector('.store__products'),
@@ -122,16 +122,16 @@ const loadhtml = () => {
       
       carScreen.innerHTML +=  `
                                 <div class = "carrito-div">
-                                  <img class= "carrito-img" src="./assets/images/products/${item.id}.jpg" alt="">
-                                  <p class = "carrito-p">${item.name}
+                                <img class= "carrito-img" src="/static/tienda/assets/images/products/${item.producto}.jpg" alt="">
+                                <p class = "carrito-p">${item.nombre}
                                     <br />
-                                    $${item.price}
+                                    $${item.precio}
                                     x${item.inCart}
                                     <br />
-                                    <span class = "carrito-price">$${item.inCart * item.price}<span>       
+                                    <span class = "carrito-price">$${item.inCart * item.precio}<span>       
                                     <br />
                                   <p>                                           
-                                  <button><i id = "${item.price}" class="fas fa-times-circle fa-2x removeIcon"></i></button>              
+                                  <button><i id = "${item.precio}" class="fas fa-times-circle fa-2x removeIcon"></i></button>              
                                 </div>
                                 `
                                 
@@ -155,10 +155,10 @@ const totalCalc = (dt) => {
   if(cart != null) {
     
     cart = parseInt(cart);
-    sessionStorage.setItem("totalCost", cart + cartItems[dt.id].price);
+    sessionStorage.setItem("totalCost", parseInt(cart) + parseInt(cartItems[dt.producto].precio));
     
   } else {
-    sessionStorage.setItem("totalCost", cartItems[dt.id].price);
+    sessionStorage.setItem("totalCost", parseInt(cartItems[dt.producto].precio));
   }
 
 formSend()
@@ -169,21 +169,37 @@ formSend()
 const cartStorage = (dt) => {
   
   let cartItems = JSON.parse(sessionStorage.getItem('productsInCart'))
-        
+  Object.values(cartItems).map(function(cartItem){
+      if(cartItem.producto == dt.producto && cartItem.inCart == undefined){
+        cartItem.inCart = 0;
+        dt.inCart = 0;
+      } else {
+        dt.inCart = cartItem.inCart;
+      }
+  })
+
+  // if(cartItems[1].inCart == undefined) {
+  //   cartItems[1].inCart = 0;
+  //   dt.inCart = 0;
+  // }
+  // else {
+  //   dt.inCart = cartItems[1].inCart
+  // }
+
   if(cartItems != null) {
 
       cartItems = {
         ...cartItems,
-        [dt.id]: dt
+        [dt.producto]: dt
       }
     
-    cartItems[dt.id].inCart += 1
+    cartItems[dt.producto].inCart += 1
 
   } else {
 
     dt.inCart = 1
     cartItems = {
-      [dt.id]: dt
+      [dt.producto]: dt
     }
 
   }
@@ -202,15 +218,16 @@ const removeItem = (dt) => {
 
     cartItems = {
         ...cartItems,
-        [dt.id]: dt
+        [dt.producto]: dt
       }
 
-    if(e.target.id == dt.price) {
+    if(e.target.id == dt.precio) {
   
       for ( let i = 0; i < carrito.length; i++) {
 
         //Detectamos que el id del target sea igual al precio del array del carrito y eliminamos ese precio.
         if (e.target.id == carrito[i]  ) {
+          dt.cantidad += 1;
           carrito.splice(i , 1)
           
           sessionStorage.setItem('cart', carrito.length);
@@ -231,8 +248,8 @@ const removeItem = (dt) => {
         }
 
       }      
-      cartItems[dt.id].inCart = 0
-      delete cartItems[dt.id]   
+      cartItems[dt.producto].inCart = 0
+      delete cartItems[dt.producto]   
       sessionStorage.setItem('productsInCart', JSON.stringify(cartItems))
 
     }
@@ -264,9 +281,9 @@ const stockSub = (dt) => {
 
     cartItems = {
         ...cartItems,
-        [dt.id]: dt
+        [dt.producto]: dt
       }
-  cartItems[dt.id].stock -= 1
+  cartItems[dt.producto].cantidad -= 1
   sessionStorage.setItem('productsInCart', JSON.stringify(cartItems))
 }; 
 
@@ -274,15 +291,14 @@ const stockSub = (dt) => {
 //Agrega al carrito al hacer click.
 const buyEvent = (dt) => {
   
-  
   store.addEventListener('click', (e) =>{
-    if(e.target.id == dt.id){ 
+    if(e.target.id == dt.producto.toString()){ 
       
-      if (dt.stock > 0) {
-        carrito.push(dt.price)
+      if (dt.cantidad > 0) {
+        carrito.push(dt.precio)
         sessionStorage.setItem('carrito', JSON.stringify(carrito))
         
-        addAlert(dt.name);
+        addAlert(dt.nombre);
         stockSub(dt)  
         cartStorage(dt)
         addCartFunction(dt) 

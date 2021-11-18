@@ -1,5 +1,5 @@
-import  {showCar, buyEvent} from './functions.js'
-import { queryFunction } from './query.js'
+import  {showCar, buyEvent} from '/static/tienda/js/functions.js'
+import { queryFunction } from '/static/tienda/js/query.js'
 
 
 //Creamos los elementos que iran adentro de la tienda.
@@ -17,7 +17,6 @@ const create = (dt) => {
                       ` 
 
   document.querySelector('.store__products').innerHTML += html
-
  buyEvent(dt)
  
 }
@@ -26,7 +25,7 @@ const create = (dt) => {
 //Crear un nuevo producto.
 const getALL = async () => {
   const URLJSON  = "http://localhost:8000/productos/"
-  
+
   //Create
   const createApi = () => {
     let options = {
@@ -43,9 +42,10 @@ const getALL = async () => {
     fetch(URLJSON, options)
     .then((resp) => resp.json())
     .then( data => {
-      create(data)
-      queryFunction()   
-    
+      if (data.detail != 'CSRF Failed: CSRF token missing or incorrect.'){
+        create(data)
+      }
+      queryFunction()
     });
 
   }
@@ -60,7 +60,7 @@ const getALL = async () => {
     .then( data => {
       createApi()
       data.map(dt => {
-        create(dt)      
+        create(dt)
       }) 
     })
     

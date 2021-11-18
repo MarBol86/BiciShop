@@ -1,4 +1,4 @@
-import { contactAlert } from "./alerts.js"
+import { contactAlert } from "/static/tienda/js/alerts.js"
 
 //Variables.
 const main = document.body;
@@ -38,26 +38,28 @@ menu.addEventListener('click', (e) => {
 
 const contactSend = () => {
 
-  document.querySelector('#contact').addEventListener('submit', (e) => {
+  let contact = document.querySelector('#contact')
+  if(contact){
+    contact.addEventListener('submit', (e) => {
 
-    e.preventDefault()
-    document.querySelector('.send-form').style.display = "none"
-    document.querySelector('#contactLoader').style.display = "block"
-
-    //Hacemos POST en la api de formulario
-    fetch(`https://formsubmit.co/ajax/7e77fc1b7e4412f9635f9c5bdd658a0a`, {
-      method: "POST",
-      body: new FormData(e.target)
+      e.preventDefault()
+      document.querySelector('.send-form').style.display = "none"
+      document.querySelector('#contactLoader').style.display = "block"
+  
+      //Hacemos POST en la api de formulario
+      fetch(`https://formsubmit.co/ajax/7e77fc1b7e4412f9635f9c5bdd658a0a`, {
+        method: "POST",
+        body: new FormData(e.target)
+      })
+      .then(res => res.ok? res.json : Promise.reject(res))
+      .then (json => { 
+        contactAlert()
+        // setTimeout(() => { location.reload() }, 2000); 
+      })
+      .catch(console.warn)
+      
     })
-    .then(res => res.ok? res.json : Promise.reject(res))
-    .then (json => { 
-      contactAlert()
-      // setTimeout(() => { location.reload() }, 2000); 
-    })
-    .catch(console.warn)
-    
-  })
-
+  }
 }
   
 
